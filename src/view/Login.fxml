@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Login">
+   <children>
+      <Label fx:id="titleText" layoutX="263.0" layoutY="14.0" text="Login">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <GridPane layoutX="150.0" layoutY="81.0" prefHeight="200.0" prefWidth="300.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label fx:id="userNameText" text="Username:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="passwordText" text="Password:" GridPane.rowIndex="1">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="timeZoneText" text="Time Zone:" GridPane.rowIndex="2">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="userNameBox" promptText="Enter Username" GridPane.columnIndex="1" />
+            <TextField fx:id="passwordBox" promptText="Enter Password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="timeZoneBox" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+      <ButtonBar layoutX="210.0" layoutY="281.0" prefHeight="40.0" prefWidth="100.0">
+        <buttons>
+          <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" text="Login" />
+            <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exit" text="Exit" />
+        </buttons>
+      </ButtonBar>
+   </children>
+</AnchorPane>

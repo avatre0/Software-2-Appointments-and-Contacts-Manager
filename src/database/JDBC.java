@@ -13,7 +13,7 @@ public abstract class JDBC {
     private static final String driver = "com.mysql.cj.jdbc.Driver"; // Driver Reference
     private static final String userName = "sqlUser"; // Username
     private static String password = "Passw0rd!"; //Password
-    public static Connection connection = null;
+    private static Connection connection = null;
 
     public static Connection openConnection()
     {

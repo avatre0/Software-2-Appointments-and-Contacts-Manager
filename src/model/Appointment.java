@@ -10,8 +10,6 @@ public class Appointment {
     private String type;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private String createdBy;
-    private LocalDateTime lastUpdated;
     private int customerID;
     private int userID;
     private int contactID;
@@ -25,13 +23,11 @@ public class Appointment {
      * @param type
      * @param startTime
      * @param endTime
-     * @param createdBy
-     * @param lastUpdated
      * @param customerID
      * @param userID
      * @param contactID
      */
-    public Appointment(int id, String title, String description, String location, String type, LocalDateTime startTime, LocalDateTime endTime, String createdBy, LocalDateTime lastUpdated, int customerID, int userID, int contactID) {
+    public Appointment(int id, String title, String description, String location, String type, LocalDateTime startTime, LocalDateTime endTime, int customerID, int userID, int contactID) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -39,8 +35,6 @@ public class Appointment {
         this.type = type;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.createdBy = createdBy;
-        this.lastUpdated = lastUpdated;
         this.customerID = customerID;
         this.userID = userID;
         this.contactID = contactID;
@@ -100,22 +94,6 @@ public class Appointment {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 
     public int getCustomerID() {

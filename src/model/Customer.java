@@ -8,9 +8,8 @@ public class Customer {
     private String address;
     private String postalCode;
     private String phone;
-    private LocalDateTime createDate;
-    private String createdBy;
-    private LocalDateTime lastUpdatedBy;
+    private String division;
+    private String country;
     private int divisionID;
 
     /**
@@ -20,20 +19,18 @@ public class Customer {
      * @param address
      * @param postalCode
      * @param phone
-     * @param createDate
-     * @param createdBy
-     * @param lastUpdatedBy
+     * @param division
+     * @param country
      * @param divisionID
      */
-    public Customer(int id, String name, String address, String postalCode, String phone, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdatedBy, int divisionID) {
+    public Customer(int id, String name, String address, String postalCode, String phone, String division, String country, int divisionID) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.postalCode = postalCode;
         this.phone = phone;
-        this.createDate = createDate;
-        this.createdBy = createdBy;
-        this.lastUpdatedBy = lastUpdatedBy;
+        this.division = division;
+        this.country = country;
         this.divisionID = divisionID;
     }
 
@@ -77,29 +74,13 @@ public class Customer {
         this.phone = phone;
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
+    public String getDivision(){ return division; }
 
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
+    public void setDivision(String division){ this.division = division; }
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
+    public String getCountry() { return country; }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getLastUpdatedBy() {
-        return lastUpdatedBy;
-    }
-
-    public void setLastUpdatedBy(LocalDateTime lastUpdatedBy) {
-        this.lastUpdatedBy = lastUpdatedBy;
-    }
+    public void setCountry(String country) { this.country = country; }
 
     public int getDivisionID() {
         return divisionID;
