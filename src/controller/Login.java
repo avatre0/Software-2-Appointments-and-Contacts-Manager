@@ -57,7 +57,6 @@ public class Login implements Initializable {
     private void login(ActionEvent actionEvent) throws SQLException {
         String userName = userNameBox.getText();
         String password = passwordBox.getText();
-
         resourceBundle = ResourceBundle.getBundle("language/language", Locale.getDefault());
 
         if (userName.isBlank()){
@@ -67,7 +66,7 @@ public class Login implements Initializable {
             Utilites.informationDisplay(resourceBundle.getString("errorDialog"),resourceBundle.getString("passwordRequired"));
         }
         else{
-            if (DBUser.verifyUser(userName,password)){
+            if (DBUser.verifyUserName(userName) && DBUser.verifyPassword(userName,password)){
                 System.out.println("Yay");
             }
             else{

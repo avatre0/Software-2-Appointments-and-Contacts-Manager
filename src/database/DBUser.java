@@ -33,13 +33,31 @@ public class DBUser {
     }
 
     /**
+     * Verify's that the username is a valid username
+     * @param userName provided username
+     * @return bool if its a valid username
+     * @throws SQLException
+     */
+    public static boolean verifyUserName(String userName) throws SQLException {
+        String sql = "SELECT * FROM USERS"; // sql statement
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql); // prepared Statement
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()){
+            if (rs.getString("User_Name").equals(userName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Verifyies proved username and password in the database
      * @param userName username of user
      * @param password provied password of that user
      * @return bool if username password combo is correct
      * @throws SQLException
      */
-    public static boolean verifyUser(String userName, String password) throws SQLException {
+    public static boolean verifyPassword(String userName, String password) throws SQLException {
         String sql = "SELECT * FROM USERS WHERE User_Name=?"; // sql statement
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql); // prepared Statement
         ps.setString(1,userName);
