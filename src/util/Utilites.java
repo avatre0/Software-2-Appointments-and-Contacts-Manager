@@ -1,29 +1,53 @@
 package util;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+
+import java.util.Optional;
 
 public class Utilites {
+
     /**
      * Alert Generator
      * @param title text for the title of the Alert
      * @param message text for the message of the Alert
      */
-    public void alertDisplay(String title, String message) {
+    public static boolean confirmDisplay(String title, String message) {
+
+        ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
+        ButtonType no = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        Alert alert = new Alert(Alert.AlertType.WARNING,"test",yes,no);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.orElse(no) == yes;
+    }
+
+    public static void informationDisplay(String title, String message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public static void errorDisplay(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
     }
 
-    public void utcToLocal() {
+    public static void utcToLocal() {
         //Todo
     }
 
-    public void utcToEastern() {
+    public static void utcToEastern() {
         //Todo
     }
 
-    public void systemToUtc() {
+    public static void systemToUtc() {
         //Todo
     }
 

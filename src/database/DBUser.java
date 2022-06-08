@@ -31,4 +31,25 @@ public class DBUser {
         }
         return userList;
     }
+
+    /**
+     * Verifyies proved username and password in the database
+     * @param userName username of user
+     * @param password provied password of that user
+     * @return bool if username password combo is correct
+     * @throws SQLException
+     */
+    public static boolean verifyUser(String userName, String password) throws SQLException {
+        String sql = "SELECT * FROM USERS WHERE User_Name=?"; // sql statement
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql); // prepared Statement
+        ps.setString(1,userName);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        if (rs.getString("Password").equals(password)){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
