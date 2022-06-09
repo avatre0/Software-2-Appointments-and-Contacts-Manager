@@ -4,19 +4,28 @@ import database.DBUser;
 import database.JDBC;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import util.Utilites;
+
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class Login implements Initializable {
+public class LoginController implements Initializable {
 
     private ResourceBundle resourceBundle;
+
+    Stage stage;
+    Parent scene;
 
     public Label titleText;
     public Label userNameText;
@@ -54,7 +63,7 @@ public class Login implements Initializable {
      * @throws SQLException
      */
     @FXML
-    private void login(ActionEvent actionEvent) throws SQLException {
+    private void login(ActionEvent actionEvent) throws SQLException, IOException {
         String userName = userNameBox.getText();
         String password = passwordBox.getText();
         resourceBundle = ResourceBundle.getBundle("language/language", Locale.getDefault());
@@ -67,7 +76,7 @@ public class Login implements Initializable {
         }
         else{
             if (DBUser.verifyUserName(userName) && DBUser.verifyPassword(userName,password)){
-                System.out.println("Yay");
+                loginSuccessful(actionEvent);
             }
             else{
                 Utilites.errorDisplay(resourceBundle.getString("error"),resourceBundle.getString("incorrectUsernamePassword"));
@@ -97,4 +106,10 @@ public class Login implements Initializable {
         }
     }
 
+    private void loginSuccessful(ActionEvent actionEvent) throws IOException {
+        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
 }
