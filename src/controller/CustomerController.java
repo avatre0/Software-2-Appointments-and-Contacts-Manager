@@ -1,5 +1,6 @@
 package controller;
 
+import database.DBAppointment;
 import database.DBCustomer;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,6 +13,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Appointment;
 import model.Customer;
 import util.Utilites;
 
@@ -35,9 +37,6 @@ public class CustomerController implements Initializable {
     Parent scene;
 
     @Override
-    /**
-     * Initializes the window, sets the table type, and search for customers in the database
-     */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             ObservableList<Customer> customers = DBCustomer.getCustomers();
@@ -55,10 +54,43 @@ public class CustomerController implements Initializable {
 
     }
 
-    public void addCustomer(ActionEvent actionEvent) {
+    /**
+     * Launches the add customer window
+     * @param actionEvent Button press of add customer
+     * @throws IOException if the fxml doesn't exist
+     */
+    public void addCustomer(ActionEvent actionEvent) throws IOException {
+        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/view/CreateCustomer.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
     }
 
-    public void modCustomer(ActionEvent actionEvent) {
+    /**
+     * Launches the update customer window
+     * @param actionEvent Button press of update customer
+     * @throws IOException if the fxml doesn't exist
+     */
+    public void modCustomer(ActionEvent actionEvent) throws IOException {
+        //Try to pass selected product to updateCustomer Controller
+        if (customerTable.getSelectionModel().getSelectedItem() != null) {
+            Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+            UpdateCustomerController.incomingCustomer(selectedCustomer);
+            try {
+                Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+                Parent scene = FXMLLoader.load(getClass().getResource("/View/UpdateCustomer.fxml"));
+                stage.setScene(new Scene(scene));
+                stage.setTitle("Update Customer");
+                stage.show();
+            }
+        //Catch for if no customers are selected, produces an alert to select a customer
+            catch (NullPointerException e){
+                Utilites.errorDisplay("Error","Please make a customer selection.");
+            }
+        }
+        else {
+            Utilites.errorDisplay("Error","Please make a customer selection.");
+        }
     }
 
     /**
@@ -69,14 +101,23 @@ public class CustomerController implements Initializable {
     public void deleteCustomer(ActionEvent actionEvent) throws SQLException {
         Customer customer = customerTable.getSelectionModel().getSelectedItem();
         if(customer != null){ //if there is a customer selected
-            if(verifyCustomerAppointments(customer)) { //confirm delete
-                Utilites.errorDisplay("Error", "Customer has appointments. Please remove appointments before deleting customer");
+            if(verifyCustomerAppointments(customer)) { //confirm if customer has appointments
+                if (Utilites.confirmDisplay("Error", "Customer has appointments. Would you like to delete associated Appointments as well?")) {
+                    if (DBAppointment.deleteAppointmentsByCustID(customer.getId()) && DBCustomer.deleteCustomer(customer)) {
+                        Utilites.informationDisplay("Success", "Deletion of appointments and customer was a success.");
+                    }
+                }
             }else{
-                DBCustomer.deleteCustomer(customer); //Deletes customer
+                if (Utilites.confirmDisplay("Confirmation", "Are you sure you want to delete selected Customer?")) {
+                    DBCustomer.deleteCustomer(customer); //deletes customer
+                    Utilites.informationDisplay("Success", "Deletion was a success.");
+                }
             }
         }else{// if a part is not selected display an error asking the user to make a selection
-            Utilites.errorDisplay("Error","Please make a part selection.");
+            Utilites.errorDisplay("Error","Please make a Customer selection.");
         }
+        ObservableList<Customer> customers = DBCustomer.getCustomers(); //updates customer list
+        customerTable.setItems(customers); //refreshes table
     }
 
     /**
@@ -85,8 +126,19 @@ public class CustomerController implements Initializable {
      * @return
      */
     public boolean verifyCustomerAppointments(Customer customer) {
+        int id = customer.getId();
+        try {
+            ObservableList<Appointment> appointmentsList = DBAppointment.getAppointmentsByCustID(id);
+            if (appointmentsList.isEmpty()){
+                return false;
+            }
+            else {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return true;
-        // todo return false if no appointments
     }
 
     /**

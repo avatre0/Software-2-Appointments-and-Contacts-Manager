@@ -46,7 +46,7 @@ public class DBCustomer {
      * @param customer Customer object
      * @throws SQLException
      */
-    public static void addCustomer(Customer customer) throws SQLException {
+    public static boolean addCustomer(Customer customer) throws SQLException {
         String sql = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Division_ID) VALUES (?, ?, ?, ?, ?)";
 
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
@@ -56,7 +56,13 @@ public class DBCustomer {
         ps.setString(4,customer.getPhone());
         ps.setInt(5,customer.getDivisionID());
 
-        ps.executeQuery();
+        try {
+            ps.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -64,7 +70,7 @@ public class DBCustomer {
      * @param customer object to modify
      * @throws SQLException
      */
-    public static void modCustomer(Customer customer) throws SQLException {
+    public static boolean modCustomer(Customer customer) throws SQLException {
         String sql = "UPDATE customers SET Customer_Name=?, Address=?, Postal_Code=?, Phone=?, Division_ID=? WHERE Customer_ID=?";
 
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
@@ -75,7 +81,14 @@ public class DBCustomer {
         ps.setInt(5,customer.getDivisionID());
         ps.setInt(6,customer.getId());
 
-        ps.executeQuery();
+        try {
+            ps.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 
     /**
@@ -91,7 +104,7 @@ public class DBCustomer {
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ps.setInt(1,id);
         try {
-            ps.executeQuery();
+            ps.execute();
             return true;
         } catch (Exception e) {
             return false;

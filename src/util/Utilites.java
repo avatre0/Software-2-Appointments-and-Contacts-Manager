@@ -4,7 +4,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Optional;
+import java.util.TimeZone;
 
 public class Utilites {
 
@@ -18,7 +22,7 @@ public class Utilites {
         ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
         ButtonType no = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
 
-        Alert alert = new Alert(Alert.AlertType.WARNING,"test",yes,no);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"test",yes,no);
         alert.setTitle(title);
         alert.setContentText(message);
         Optional<ButtonType> result = alert.showAndWait();
@@ -39,16 +43,13 @@ public class Utilites {
         alert.showAndWait();
     }
 
-    public static void utcToLocal() {
+    public static void utcToLocal(ZonedDateTime zonedDateTime) {
         //Todo
     }
 
-    public static void utcToEastern() {
+    public static void localToUTC(LocalDateTime localDateTime) {
         //Todo
     }
 
-    public static void systemToUtc() {
-        //Todo
-    }
 
 }
