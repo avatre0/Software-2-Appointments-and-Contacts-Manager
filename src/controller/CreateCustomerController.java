@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 import model.Country;
 import model.Customer;
 import model.Division;
-import util.Utilites;
+import util.Utilities;
 
 import java.io.IOException;
 import java.net.URL;
@@ -60,7 +60,6 @@ public class CreateCustomerController implements Initializable {
             e.printStackTrace();
         }
         countryPick.setItems(countryList);
-
     }
     /**
      * Saves customer to database
@@ -70,8 +69,7 @@ public class CreateCustomerController implements Initializable {
     @FXML
     private void saveButton(ActionEvent actionEvent) throws IOException, SQLException {
        if (checkIfNotEmpty()) {
-           if (Utilites.confirmDisplay("Confirm", "Are You sure you want to save this Customer?")) {
-               //Customer newCustomer = new Customer(1,nameBox.getText(),addressBox.getText(),postalCodeBox.getText(),phoneBox.getText(),divisionPick.getValue(),countryPick.getValue(), DBDivision.getDivisionIDByName(divisionPick.getValue()).getId());
+           if (Utilities.confirmDisplay("Confirm", "Are You sure you want to save this Customer?")) {
                String name = nameBox.getText();
                String address = addressBox.getText();
                String postalCode = postalCodeBox.getText();
@@ -82,15 +80,14 @@ public class CreateCustomerController implements Initializable {
 
                Customer newCustomer = new Customer(0,name,address,postalCode,phone,division,country,divID);
                try {
-                   boolean created = DBCustomer.addCustomer(newCustomer);
-                   if (created) {
-                       Utilites.informationDisplay("Successful", "Creation Successful. Returning to Customers.");
+                   if (DBCustomer.addCustomer(newCustomer)) {
+                       Utilities.informationDisplay("Successful", "Creation Successful. Returning to Customers.");
                        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
                        scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
                        stage.setScene(new Scene(scene));
                        stage.show();
                    } else {
-                       Utilites.errorDisplay("Error", "Failed to Create Customer");
+                       Utilities.errorDisplay("Error", "Failed to Create Customer");
                    }
                } catch (Exception e) {
                    e.printStackTrace();
@@ -101,7 +98,7 @@ public class CreateCustomerController implements Initializable {
 
     @FXML
     private void exitButton(ActionEvent actionEvent) throws IOException {
-        if (Utilites.confirmDisplay("Confirm", "Are you sture you want to exit. Changes will not be saved")) {
+        if (Utilities.confirmDisplay("Confirm", "Are you sture you want to exit. Changes will not be saved")) {
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
             stage.setScene(new Scene(scene));
@@ -115,27 +112,27 @@ public class CreateCustomerController implements Initializable {
      */
     private boolean checkIfNotEmpty() {
         if (nameBox.getText().isEmpty()){
-            Utilites.errorDisplay("Error", "Name is Required.");
+            Utilities.errorDisplay("Error", "Name is Required.");
             return false;
         }
         if (addressBox.getText().isEmpty()){
-            Utilites.errorDisplay("Error", "Address is Required.");
+            Utilities.errorDisplay("Error", "Address is Required.");
             return false;
         }
         if (postalCodeBox.getText().isEmpty()){
-            Utilites.errorDisplay("Error", "Postal Code is Required.");
+            Utilities.errorDisplay("Error", "Postal Code is Required.");
             return false;
         }
         if (phoneBox.getText().isEmpty()){
-            Utilites.errorDisplay("Error", "Phone Number is Required.");
+            Utilities.errorDisplay("Error", "Phone Number is Required.");
             return false;
         }
         if (countryPick.getSelectionModel().isEmpty()){
-            Utilites.errorDisplay("Error", "Division Selection is Required.");
+            Utilities.errorDisplay("Error", "Division Selection is Required.");
             return false;
         }
         if (divisionPick.getSelectionModel().isEmpty()){
-            Utilites.errorDisplay("Error", "Country Select is Required.");
+            Utilities.errorDisplay("Error", "Country Select is Required.");
             return false;
         }
         return true;

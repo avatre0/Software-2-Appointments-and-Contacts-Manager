@@ -12,7 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import util.Utilites;
+import util.Utilities;
 
 import java.io.IOException;
 import java.net.URL;
@@ -69,17 +69,17 @@ public class LoginController implements Initializable {
         resourceBundle = ResourceBundle.getBundle("language/language", Locale.getDefault());
 
         if (userName.isBlank()){
-            Utilites.informationDisplay(resourceBundle.getString("errorDialog"),resourceBundle.getString("usernameRequired"));
+            Utilities.informationDisplay(resourceBundle.getString("errorDialog"),resourceBundle.getString("usernameRequired"));
         }
         if (password.isBlank()){
-            Utilites.informationDisplay(resourceBundle.getString("errorDialog"),resourceBundle.getString("passwordRequired"));
+            Utilities.informationDisplay(resourceBundle.getString("errorDialog"),resourceBundle.getString("passwordRequired"));
         }
         else{
             if (DBUser.verifyUserName(userName) && DBUser.verifyPassword(userName,password)){
                 loginSuccessful(actionEvent);
             }
             else{
-                Utilites.errorDisplay(resourceBundle.getString("error"),resourceBundle.getString("incorrectUsernamePassword"));
+                Utilities.errorDisplay(resourceBundle.getString("error"),resourceBundle.getString("incorrectUsernamePassword"));
             }
         }
     }
@@ -100,7 +100,7 @@ public class LoginController implements Initializable {
             message = resourceBundle.getString("exitError");
         }
 
-        if (Utilites.confirmDisplay(title, message)) {
+        if (Utilities.confirmDisplay(title, message)) {
             JDBC.closeConnection();
             System.exit(0);
         }

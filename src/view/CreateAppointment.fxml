@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateAppointmentsController">
    <children>
       <GridPane layoutX="14.0" layoutY="64.0" prefHeight="460.0" prefWidth="622.0">
@@ -71,11 +70,6 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label text="End Date" GridPane.columnIndex="2" GridPane.rowIndex="2">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
             <Label text="End Time" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <font>
                   <Font size="20.0" />
@@ -97,12 +91,11 @@
             <TextField fx:id="locationBox" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="typeBox" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <ComboBox fx:id="contactCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ComboBox fx:id="startTimeCombo" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <ComboBox fx:id="endTimeCombo" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <ComboBox fx:id="startTimeCombo" disable="true" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <ComboBox fx:id="endTimeCombo" disable="true" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
             <ComboBox fx:id="customerIDCombo" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
             <ComboBox fx:id="userIDCombo" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-            <DatePicker fx:id="startDatePicker" GridPane.columnIndex="3" />
-            <DatePicker fx:id="endDatePicker" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <DatePicker fx:id="startDatePicker" onAction="#startSelected" GridPane.columnIndex="3" />
             <Button mnemonicParsing="false" onAction="#saveButton" text="Save" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Button mnemonicParsing="false" onAction="#exitButton" text="Exit" GridPane.columnIndex="3" GridPane.rowIndex="6" />
          </children>

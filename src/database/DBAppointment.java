@@ -7,6 +7,7 @@ import model.Appointment;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class DBAppointment {
@@ -148,6 +149,33 @@ public class DBAppointment {
             ps.execute();
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Adds provided appointment to the database
+     * @param appointment Appointment object
+     * @throws SQLException caches returns false if exception
+     */
+    public static boolean createAppointment(Appointment appointment) throws SQLException {
+        String sql = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Customer_ID, Contact_ID, User_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ps.setString(1,appointment.getTitle());
+        ps.setString(2,appointment.getDescription());
+        ps.setString(3,appointment.getLocation());
+        ps.setString(4,appointment.getType());
+        ps.setTimestamp(5, Timestamp.valueOf(appointment.getStartTime()));
+        ps.setTimestamp(6,Timestamp.valueOf(appointment.getEndTime()));
+        ps.setInt(7,appointment.getCustomerID());
+        ps.setInt(8,appointment.getContactID());
+        ps.setInt(9,appointment.getUserID());
+
+        try {
+            ps.execute();
+            return true;
+        }catch (Exception e) {
             e.printStackTrace();
             return false;
         }

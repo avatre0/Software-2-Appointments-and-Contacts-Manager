@@ -2,6 +2,7 @@ package database;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.Contact;
 import model.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -69,5 +70,29 @@ public class DBUser {
         else {
             return false;
         }
+    }
+
+    /**
+     * Gets a list of all user objects
+     * @return ObservableList of users
+     * @throws SQLException catches
+     */
+    public static ObservableList<User> getUserList() throws SQLException {
+        ObservableList<User> users = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM users;";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        try {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("User_ID");
+                String userName = rs.getString("User_Name");
+                String password = rs.getString("Password");
+                User newUser = new User(id, userName, password);
+                users.add(newUser);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 }

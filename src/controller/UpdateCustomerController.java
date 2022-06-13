@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 import model.Country;
 import model.Customer;
 import model.Division;
-import util.Utilites;
+import util.Utilities;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,7 +41,7 @@ public class UpdateCustomerController implements Initializable {
 
     public void saveButton(ActionEvent actionEvent) throws IOException, SQLException {
         if (checkIfNotEmpty()) {
-            if (Utilites.confirmDisplay("Confirm", "Are You sure you want to update this Customer?")) {
+            if (Utilities.confirmDisplay("Confirm", "Are You sure you want to update this Customer?")) {
 
                 int id = Integer.parseInt(idBox.getText());
                 String name = nameBox.getText();
@@ -56,13 +56,13 @@ public class UpdateCustomerController implements Initializable {
                 try {
                     boolean created = DBCustomer.modCustomer(modCustomer);
                     if (created) {
-                        Utilites.informationDisplay("Successful","Modification Successful. Returning to Customers.");
+                        Utilities.informationDisplay("Successful","Modification Successful. Returning to Customers.");
                         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
                         scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
                         stage.setScene(new Scene(scene));
                         stage.show();
                     } else {
-                        Utilites.errorDisplay("Error", "Failed to Modify Customer");
+                        Utilities.errorDisplay("Error", "Failed to Modify Customer");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -72,7 +72,7 @@ public class UpdateCustomerController implements Initializable {
     }
 
     public void exitButton(ActionEvent actionEvent) throws IOException {
-        if (Utilites.confirmDisplay("Confirm", "Are you sture you want to exit. Changes will not be saved")) {
+        if (Utilities.confirmDisplay("Confirm", "Are you sture you want to exit. Changes will not be saved")) {
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
             stage.setScene(new Scene(scene));
@@ -131,27 +131,27 @@ public class UpdateCustomerController implements Initializable {
      */
     private boolean checkIfNotEmpty() {
         if (nameBox.getText().isEmpty()){
-            Utilites.errorDisplay("Error", "Name is Required.");
+            Utilities.errorDisplay("Error", "Name is Required.");
             return false;
         }
         if (addressBox.getText().isEmpty()){
-            Utilites.errorDisplay("Error", "Address is Required.");
+            Utilities.errorDisplay("Error", "Address is Required.");
             return false;
         }
         if (postalCodeBox.getText().isEmpty()){
-            Utilites.errorDisplay("Error", "Postal Code is Required.");
+            Utilities.errorDisplay("Error", "Postal Code is Required.");
             return false;
         }
         if (phoneBox.getText().isEmpty()){
-            Utilites.errorDisplay("Error", "Phone Number is Required.");
+            Utilities.errorDisplay("Error", "Phone Number is Required.");
             return false;
         }
         if (countryPick.getSelectionModel().isEmpty()){
-            Utilites.errorDisplay("Error", "Division Selection is Required.");
+            Utilities.errorDisplay("Error", "Division Selection is Required.");
             return false;
         }
         if (divisionPick.getSelectionModel().isEmpty()){
-            Utilites.errorDisplay("Error", "Country Select is Required.");
+            Utilities.errorDisplay("Error", "Country Select is Required.");
             return false;
         }
         return true;

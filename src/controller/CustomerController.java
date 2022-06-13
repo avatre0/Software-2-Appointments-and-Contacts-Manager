@@ -15,7 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
-import util.Utilites;
+import util.Utilities;
 
 import java.io.IOException;
 import java.net.URL;
@@ -85,11 +85,11 @@ public class CustomerController implements Initializable {
             }
         //Catch for if no customers are selected, produces an alert to select a customer
             catch (NullPointerException e){
-                Utilites.errorDisplay("Error","Please make a customer selection.");
+                Utilities.errorDisplay("Error","Please make a customer selection.");
             }
         }
         else {
-            Utilites.errorDisplay("Error","Please make a customer selection.");
+            Utilities.errorDisplay("Error","Please make a customer selection.");
         }
     }
 
@@ -102,19 +102,19 @@ public class CustomerController implements Initializable {
         Customer customer = customerTable.getSelectionModel().getSelectedItem();
         if(customer != null){ //if there is a customer selected
             if(verifyCustomerAppointments(customer)) { //confirm if customer has appointments
-                if (Utilites.confirmDisplay("Error", "Customer has appointments. Would you like to delete associated Appointments as well?")) {
+                if (Utilities.confirmDisplay("Error", "Customer has appointments. Would you like to delete associated Appointments as well?")) {
                     if (DBAppointment.deleteAppointmentsByCustID(customer.getId()) && DBCustomer.deleteCustomer(customer)) {
-                        Utilites.informationDisplay("Success", "Deletion of appointments and customer was a success.");
+                        Utilities.informationDisplay("Success", "Deletion of appointments and customer was a success.");
                     }
                 }
             }else{
-                if (Utilites.confirmDisplay("Confirmation", "Are you sure you want to delete selected Customer?")) {
+                if (Utilities.confirmDisplay("Confirmation", "Are you sure you want to delete selected Customer?")) {
                     DBCustomer.deleteCustomer(customer); //deletes customer
-                    Utilites.informationDisplay("Success", "Deletion was a success.");
+                    Utilities.informationDisplay("Success", "Deletion was a success.");
                 }
             }
         }else{// if a part is not selected display an error asking the user to make a selection
-            Utilites.errorDisplay("Error","Please make a Customer selection.");
+            Utilities.errorDisplay("Error","Please make a Customer selection.");
         }
         ObservableList<Customer> customers = DBCustomer.getCustomers(); //updates customer list
         customerTable.setItems(customers); //refreshes table
