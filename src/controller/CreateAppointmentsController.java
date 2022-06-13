@@ -77,6 +77,7 @@ public class CreateAppointmentsController implements Initializable {
                                 Utilities.informationDisplay("Successful", "Creation Successful. Returning to Appointments.");
                                 stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
                                 scene = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
+                                stage.setTitle("Customers");
                                 stage.setScene(new Scene(scene));
                                 stage.show();
                             } else {
@@ -97,6 +98,7 @@ public class CreateAppointmentsController implements Initializable {
         if (Utilities.confirmDisplay("Exit", "Are you sture you want to exit. Changes will not be saved")){
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
+            stage.setTitle("Customers");
             stage.setScene(new Scene(scene));
             stage.show();
         }

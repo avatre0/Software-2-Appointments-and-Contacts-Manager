@@ -27,6 +27,7 @@ public class MainMenuController implements Initializable {
     public void customerButton(ActionEvent actionEvent) throws IOException {
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
+        stage.setTitle("Customers");
         stage.setScene(new Scene(scene));
         stage.show();
     }
@@ -34,11 +35,13 @@ public class MainMenuController implements Initializable {
     public void appointmentsButton(ActionEvent actionEvent) throws IOException{
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
+        stage.setTitle("Appointments");
         stage.setScene(new Scene(scene));
         stage.show();
     }
 
     public void reportsButton(ActionEvent actionEvent) {
+        //Todo Reports
     }
 
     /**
@@ -50,6 +53,7 @@ public class MainMenuController implements Initializable {
         if (Utilities.confirmDisplay("Logout", "Are you sure you want to Logout?")) {
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
+            stage.setTitle("Appointments and Customer Manager");
             stage.setScene(new Scene(scene));
             stage.show();
         }

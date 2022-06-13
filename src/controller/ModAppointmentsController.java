@@ -31,6 +31,7 @@ import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class ModAppointmentsController implements Initializable {
+    public TextField idBox;
     public TextField titleBox;
     public TextField descriptionBox;
     public TextField locationBox;
@@ -41,6 +42,9 @@ public class ModAppointmentsController implements Initializable {
     public ComboBox<Integer> customerIDCombo;
     public ComboBox<Integer> userIDCombo;
     public DatePicker startDatePicker;
+
+    private static Appointment selectedAppointment;
+
 
     Stage stage;
     Parent scene;
@@ -77,6 +81,7 @@ public class ModAppointmentsController implements Initializable {
                                 Utilities.informationDisplay("Successful", "Creation Successful. Returning to Appointments.");
                                 stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
                                 scene = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
+                                stage.setTitle("Appointments");
                                 stage.setScene(new Scene(scene));
                                 stage.show();
                             } else {
@@ -97,6 +102,7 @@ public class ModAppointmentsController implements Initializable {
         if (Utilities.confirmDisplay("Exit", "Are you sture you want to exit. Changes will not be saved")){
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
+            stage.setTitle("Appointments");
             stage.setScene(new Scene(scene));
             stage.show();
         }
@@ -235,18 +241,21 @@ public class ModAppointmentsController implements Initializable {
      * @throws SQLException
      */
     private boolean checkForNoOverlapAppointment() throws SQLException {
+        //todo test
         ObservableList<Appointment> custAppointments = DBAppointment.getAppointmentsByCustID(customerIDCombo.getValue());
         LocalDateTime pickedStartDateTime = LocalDateTime.of(startDatePicker.getValue(),startTimeCombo.getValue());
         LocalDateTime pickedEndDateTime = LocalDateTime.of(startDatePicker.getValue(),endTimeCombo.getValue());
 
         for (Appointment appointment : custAppointments) {
-            if (appointment.getStartTime().isAfter(pickedStartDateTime) && appointment.getStartTime().isBefore(pickedEndDateTime)){
-                Utilities.errorDisplay("Error", "Appointments cannot overlap. ");
-                return false;
-            }
-            if (appointment.getEndTime().isAfter(pickedStartDateTime) && appointment.getEndTime().isBefore(pickedEndDateTime)){
-                Utilities.errorDisplay("Error", "Appointments cannot overlap. ");
-                return false;
+            if (appointment.getId() != Integer.parseInt(idBox.getText())) {
+                if (appointment.getStartTime().isAfter(pickedStartDateTime) && appointment.getStartTime().isBefore(pickedEndDateTime)) {
+                    Utilities.errorDisplay("Error", "Appointments cannot overlap. ");
+                    return false;
+                }
+                if (appointment.getEndTime().isAfter(pickedStartDateTime) && appointment.getEndTime().isBefore(pickedEndDateTime)) {
+                    Utilities.errorDisplay("Error", "Appointments cannot overlap. ");
+                    return false;
+                }
             }
         }
         return true;
@@ -260,10 +269,39 @@ public class ModAppointmentsController implements Initializable {
         setTimeCombos();
     }
 
+    /**
+     * Recives the selected appointment from the appointments table
+     * @param appointment select appointment
+     */
+    public static void incomingAppointment(Appointment appointment) {
+        selectedAppointment = appointment;
+    }
+
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) { ;
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Sets the combo boxes
         setContactCombo();
         setUserIDCombo();
         setCustomerIDCombo();
+
+        //Getting LocalTimes and LocalDates to use in selecting the combos boxes
+        LocalTime startTime = selectedAppointment.getStartTime().toLocalTime();
+        LocalTime endTime = selectedAppointment.getEndTime().toLocalTime();
+        LocalDate startDate = selectedAppointment.getStartTime().toLocalDate();
+
+        //Setting the fields to the passed in value
+        idBox.setText(Integer.toString(selectedAppointment.getId()));
+        titleBox.setText(selectedAppointment.getTitle());
+        descriptionBox.setText(selectedAppointment.getDescription());
+        locationBox.setText(selectedAppointment.getLocation());
+        typeBox.setText(selectedAppointment.getType());
+        contactCombo.getSelectionModel().select(selectedAppointment.getContactName());
+        startTimeCombo.getSelectionModel().select(startTime);
+        endTimeCombo.getSelectionModel().select(endTime);
+        customerIDCombo.getSelectionModel().select(selectedAppointment.getCustomerID());
+        userIDCombo.getSelectionModel().select(selectedAppointment.getUserID());
+        startDatePicker.setValue(startDate);
+
+        setTimeCombos();
     }
 }

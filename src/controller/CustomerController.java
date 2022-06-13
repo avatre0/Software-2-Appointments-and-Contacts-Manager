@@ -62,6 +62,7 @@ public class CustomerController implements Initializable {
     public void addCustomer(ActionEvent actionEvent) throws IOException {
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/CreateCustomer.fxml"));
+        stage.setTitle("Add Customer");
         stage.setScene(new Scene(scene));
         stage.show();
     }
@@ -72,7 +73,7 @@ public class CustomerController implements Initializable {
      * @throws IOException if the fxml doesn't exist
      */
     public void modCustomer(ActionEvent actionEvent) throws IOException {
-        //Try to pass selected product to updateCustomer Controller
+        //Try to pass selected customer to updateCustomer Controller
         if (customerTable.getSelectionModel().getSelectedItem() != null) {
             Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
             UpdateCustomerController.incomingCustomer(selectedCustomer);
@@ -149,6 +150,7 @@ public class CustomerController implements Initializable {
     public void mainMenu(ActionEvent actionEvent) throws IOException {
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+        stage.setTitle("Appointments and Customer Manager");
         stage.setScene(new Scene(scene));
         stage.show();
     }

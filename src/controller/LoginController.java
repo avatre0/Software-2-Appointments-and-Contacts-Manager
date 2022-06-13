@@ -109,6 +109,7 @@ public class LoginController implements Initializable {
     private void loginSuccessful(ActionEvent actionEvent) throws IOException {
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+        stage.setTitle("Appointments and Customer Manager");
         stage.setScene(new Scene(scene));
         stage.show();
     }

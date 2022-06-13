@@ -59,6 +59,7 @@ public class UpdateCustomerController implements Initializable {
                         Utilities.informationDisplay("Successful","Modification Successful. Returning to Customers.");
                         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
                         scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
+                        stage.setTitle("Customers");
                         stage.setScene(new Scene(scene));
                         stage.show();
                     } else {
@@ -75,6 +76,7 @@ public class UpdateCustomerController implements Initializable {
         if (Utilities.confirmDisplay("Confirm", "Are you sture you want to exit. Changes will not be saved")) {
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
+            stage.setTitle("Customers");
             stage.setScene(new Scene(scene));
             stage.show();
         }
@@ -99,6 +101,10 @@ public class UpdateCustomerController implements Initializable {
         countryPick.setItems(countryList);
     }
 
+    /**
+     * Receives the selected customer from the customer table.
+     * @param customer
+     */
     public static void incomingCustomer(Customer customer){
         selectedCustomer = customer;
     }

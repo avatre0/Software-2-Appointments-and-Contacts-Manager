@@ -84,6 +84,7 @@ public class CreateCustomerController implements Initializable {
                        Utilities.informationDisplay("Successful", "Creation Successful. Returning to Customers.");
                        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
                        scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
+                       stage.setTitle("Customers");
                        stage.setScene(new Scene(scene));
                        stage.show();
                    } else {
@@ -101,6 +102,7 @@ public class CreateCustomerController implements Initializable {
         if (Utilities.confirmDisplay("Confirm", "Are you sture you want to exit. Changes will not be saved")) {
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
+            stage.setTitle("Customers");
             stage.setScene(new Scene(scene));
             stage.show();
         }
