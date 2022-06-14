@@ -12,15 +12,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import model.Appointment;
+import util.LogName;
 import util.Utilities;
 
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class MainMenuController implements Initializable {
@@ -34,6 +39,41 @@ public class MainMenuController implements Initializable {
     public Button reportsButton;
     public Button logoutButton;
 
+    /**
+     * Lambda Expression
+     */
+    LogName logName = () -> {
+        return "login_activity.txt";
+    };
+
+    /**
+     * Creates a new File from a lambda expression value
+     * If file exists it doest do anything.
+     */
+    private void createFile(){
+        try {
+            File newFile = new File(logName.getfileName());
+            newFile.createNewFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Writes to file a login failure with username and timestamp
+     * retrieves filename from lambda expression
+     */
+    private void logoutSuccess(){
+        try {
+            FileWriter fileWriter = new FileWriter(logName.getfileName(),true);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            Date date = new Date(System.currentTimeMillis());
+            fileWriter.write("Logout Success:  Timestamp: " + simpleDateFormat.format(date) +"\n");
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void customerButton(ActionEvent actionEvent) throws IOException {
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -66,6 +106,8 @@ public class MainMenuController implements Initializable {
      */
     public void logoutButton(ActionEvent actionEvent) throws IOException {
         if (Utilities.confirmDisplay("Logout", "Are you sure you want to Logout?")) {
+            createFile();
+            logoutSuccess();
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
             stage.setTitle("Appointments and Customer Manager");

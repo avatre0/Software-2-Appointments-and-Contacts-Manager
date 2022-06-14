@@ -23,7 +23,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
-public class Reports implements Initializable {
+public class ReportsController implements Initializable {
     public TableView<TypeAppointment> typeTable;
     public TableColumn<TypeAppointment, String> typeTableTypeCol;
     public TableColumn<TypeAppointment, Integer> typeTableAmountCol;

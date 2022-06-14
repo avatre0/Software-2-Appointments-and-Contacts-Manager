@@ -12,11 +12,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import util.LogName;
 import util.Utilities;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -38,6 +43,42 @@ public class LoginController implements Initializable {
     public Button exitButton;
 
     /**
+     * Lambda Expression
+     */
+    LogName logName = () -> {
+        return "login_activity.txt";
+    };
+
+    /**
+     * Creates a new File from a lambda expression value
+     * If file exists it doest do anything.
+     */
+    private void createFile(){
+        try {
+            File newFile = new File(logName.getfileName());
+            newFile.createNewFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Writes to file a login failure with username and timestamp
+     * retrieves filename from lambda expression
+     */
+    private void loginFail(){
+        try {
+            FileWriter fileWriter = new FileWriter(logName.getfileName(),true);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            Date date = new Date(System.currentTimeMillis());
+            fileWriter.write("Login Failed: Username=" + userNameBox.getText() + " Timestamp: " + simpleDateFormat.format(date) +"\n");
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Initializes the login view
      * Looks for default local, if french changes login page to french
      * @param url
@@ -55,6 +96,7 @@ public class LoginController implements Initializable {
             loginButton.setText(resourceBundle.getString("login"));
             exitButton.setText(resourceBundle.getString("cancel"));
         }
+        createFile();
     }
 
     /**
@@ -80,6 +122,7 @@ public class LoginController implements Initializable {
             }
             else{
                 Utilities.errorDisplay(resourceBundle.getString("error"),resourceBundle.getString("incorrectUsernamePassword"));
+                loginFail();
             }
         }
     }
@@ -106,11 +149,27 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * Writes to file login successful with the username and timestamp
+     * retreives filename from lambda expression
+     * @param actionEvent button press
+     * @throws IOException catches and prints stack
+     */
     private void loginSuccessful(ActionEvent actionEvent) throws IOException {
-        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-        stage.setTitle("Appointments and Customer Manager");
-        stage.setScene(new Scene(scene));
-        stage.show();
+        try {
+            FileWriter fileWriter = new FileWriter(logName.getfileName(),true);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            Date date = new Date(System.currentTimeMillis());
+            fileWriter.write("Login Success: Username=" + userNameBox.getText() + " Timestamp: " + simpleDateFormat.format(date) +"\n");
+            fileWriter.close();
+
+            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+            stage.setTitle("Appointments and Customer Manager");
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
