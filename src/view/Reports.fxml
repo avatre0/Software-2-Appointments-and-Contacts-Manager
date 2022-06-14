@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Reports">
+   <children>
+      <TabPane prefWidth="700.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab onSelectionChanged="#typeMonthTab" text="Number of Customer Appointments by Type and Month">
+               <content>
+                  <AnchorPane prefHeight="470.0" prefWidth="700.0">
+                     <children>
+                        <TableView fx:id="typeTable" layoutX="5.0" layoutY="65.0" prefHeight="400.0" prefWidth="340.0">
+                          <columns>
+                            <TableColumn fx:id="typeTableTypeCol" prefWidth="75.0" text="Type" />
+                            <TableColumn fx:id="typeTableAmountCol" prefWidth="75.0" text="Amount" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <TableView fx:id="monthTable" layoutX="355.0" layoutY="65.0" prefHeight="400.0" prefWidth="340.0">
+                          <columns>
+                            <TableColumn fx:id="monthTableYearCol" prefWidth="75.0" text="Year" />
+                            <TableColumn fx:id="monthTableMonthCol" prefWidth="75.0" text="Month" />
+                              <TableColumn fx:id="monthTableAmountCol" prefWidth="75.0" text="Amount" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <Label layoutX="355.0" layoutY="35.0" text="Month">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="9.0" layoutY="35.0" text="Type">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content>
+          </Tab>
+          <Tab onSelectionChanged="#contactScheduleTab" text="Contact Schedules by ID">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label text="Contact ID" />
+                              <ComboBox fx:id="contactIDCombo" onAction="#customerIDSelected" prefWidth="150.0" GridPane.columnIndex="1" />
+                              <Label text="Name:" GridPane.columnIndex="2" />
+                              <Label fx:id="contactName" GridPane.columnIndex="3" />
+                           </children>
+                        </GridPane>
+                        <TableView fx:id="contactScheduleTable" layoutX="12.0" layoutY="30.0" prefHeight="432.0" prefWidth="678.0">
+                          <columns>
+                            <TableColumn fx:id="contactScheduleApptIDCol" prefWidth="75.0" text="Appointment ID" />
+                            <TableColumn fx:id="contactScheduleTitleCol" prefWidth="75.0" text="Title" />
+                              <TableColumn fx:id="contactScheduleTypeCol" prefWidth="75.0" text="Type" />
+                              <TableColumn fx:id="contactScheduleDescCol" prefWidth="75.0" text="Description" />
+                              <TableColumn fx:id="contactScheduleStartCol" prefWidth="75.0" text="Start Date-Time" />
+                              <TableColumn fx:id="contactScheduleEndCol" prefWidth="75.0" text="End Date-Time" />
+                              <TableColumn fx:id="contactScheduleCustIDCol" prefWidth="75.0" text="Customer ID" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children></AnchorPane>
+               </content>
+          </Tab>
+            <Tab text="Customer Total Appointments by ID">
+               <content>
+                  <TableView fx:id="customerTotalAptIDTable" prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                      <TableColumn fx:id="customerIDNumberAppointmentsCol" prefWidth="75.0" text="Customer ID" />
+                      <TableColumn fx:id="custAppointmentsIDAmount" prefWidth="75.0" text="Amount" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <Button layoutX="609.0" layoutY="511.0" mnemonicParsing="false" onAction="#mainMenu" text="Main Menu" />
+   </children>
+</AnchorPane>

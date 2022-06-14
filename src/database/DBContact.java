@@ -56,4 +56,31 @@ public class DBContact {
         }
         return contacts;
     }
+
+    /**
+     * Retrieves a contact by ID
+     * @param id int contact ID to search for
+     * @return a contact, if contact has a id of 0 no contact found.
+     * @throws SQLException catches and prints error
+     */
+    public static Contact getContactByID(int id) throws SQLException {
+        Contact newContact = new Contact(0,"","");
+        String sql = "SELECT * FROM contacts WHERE Contact_ID=?;";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ps.setInt(1,id);
+        try {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                int contactID = rs.getInt("Contact_ID");
+                String name = rs.getString("Contact_Name");
+                String email = rs.getString("Email");
+                newContact.setId(contactID);
+                newContact.setName(name);
+                newContact.setEmail(email);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return newContact;
+    }
 }

@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainMenuController">
+<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainMenuController">
    <children>
-      <GridPane focusTraversable="true" layoutX="200.0" layoutY="125.0" prefHeight="350.0" prefWidth="200.0">
+      <GridPane focusTraversable="true" layoutX="107.0" layoutY="112.0" prefHeight="404.0" prefWidth="387.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
@@ -19,12 +19,14 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Button fx:id="customerButton" mnemonicParsing="false" onAction="#customerButton" text="Contacts" />
             <Button fx:id="appointmentsButton" mnemonicParsing="false" onAction="#appointmentsButton" text="Appointments" GridPane.rowIndex="1" />
             <Button fx:id="reportsButton" mnemonicParsing="false" onAction="#reportsButton" text="Reports" GridPane.rowIndex="2" />
             <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logoutButton" text="Logout" GridPane.rowIndex="3" />
+            <Label fx:id="appointmentCount" text="No Upcoming Appointments" GridPane.rowIndex="4" />
          </children>
       </GridPane>
       <Label layoutX="224.0" layoutY="46.0" text="Main Menu">

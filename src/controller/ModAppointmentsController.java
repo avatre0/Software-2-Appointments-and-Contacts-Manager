@@ -60,6 +60,7 @@ public class ModAppointmentsController implements Initializable {
             if (Utilities.confirmDisplay("Save", "Are You sure you want to save this Appointment?")) {
                 if (checkForNoOverlapAppointment()) {
                     if (startEndCheck()) {
+                        int id = Integer.parseInt(idBox.getText());
                         String title = titleBox.getText();
                         String description = descriptionBox.getText();
                         String location = locationBox.getText();
@@ -75,9 +76,9 @@ public class ModAppointmentsController implements Initializable {
                         LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
                         LocalDateTime endDateTime = LocalDateTime.of(startDate, endTime);
 
-                        Appointment newAppointment = new Appointment(0, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID, contactName);
+                        Appointment newAppointment = new Appointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID, contactName);
                         try {
-                            if (DBAppointment.createAppointment(newAppointment)) {
+                            if (DBAppointment.modAppointment(newAppointment)) {
                                 Utilities.informationDisplay("Successful", "Creation Successful. Returning to Appointments.");
                                 stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
                                 scene = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
@@ -114,39 +115,39 @@ public class ModAppointmentsController implements Initializable {
             return false;
         }
         if (descriptionBox.getText().isEmpty()) {
-            Utilities.errorDisplay("Error", "Title is Required.");
+            Utilities.errorDisplay("Error", "Description is Required.");
             return false;
         }
         if (locationBox.getText().isEmpty()) {
-            Utilities.errorDisplay("Error", "Title is Required.");
+            Utilities.errorDisplay("Error", "Location is Required.");
             return false;
         }
         if (typeBox.getText().isEmpty()) {
-            Utilities.errorDisplay("Error", "Title is Required.");
+            Utilities.errorDisplay("Error", "Type is Required.");
             return false;
         }
         if (contactCombo.getSelectionModel().isEmpty()) {
-            Utilities.errorDisplay("Error", "Title is Required.");
+            Utilities.errorDisplay("Error", "Contact is Required.");
             return false;
         }
         if (startTimeCombo.getSelectionModel().isEmpty()) {
-            Utilities.errorDisplay("Error", "Title is Required.");
+            Utilities.errorDisplay("Error", "Start Time is Required.");
             return false;
         }
         if (endTimeCombo.getSelectionModel().isEmpty()) {
-            Utilities.errorDisplay("Error", "Title is Required.");
+            Utilities.errorDisplay("Error", "End Time is Required.");
             return false;
         }
         if (customerIDCombo.getSelectionModel().isEmpty()) {
-            Utilities.errorDisplay("Error", "Title is Required.");
+            Utilities.errorDisplay("Error", "Customer ID is Required.");
             return false;
         }
         if (userIDCombo.getSelectionModel().isEmpty()) {
-            Utilities.errorDisplay("Error", "Title is Required.");
+            Utilities.errorDisplay("Error", "User ID is Required.");
             return false;
         }
         if (startDatePicker.getValue() == null) {
-            Utilities.errorDisplay("Error", "Title is Required.");
+            Utilities.errorDisplay("Error", "Starting Date is Required.");
             return false;
         }
 
@@ -241,7 +242,6 @@ public class ModAppointmentsController implements Initializable {
      * @throws SQLException
      */
     private boolean checkForNoOverlapAppointment() throws SQLException {
-        //todo test
         ObservableList<Appointment> custAppointments = DBAppointment.getAppointmentsByCustID(customerIDCombo.getValue());
         LocalDateTime pickedStartDateTime = LocalDateTime.of(startDatePicker.getValue(),startTimeCombo.getValue());
         LocalDateTime pickedEndDateTime = LocalDateTime.of(startDatePicker.getValue(),endTimeCombo.getValue());

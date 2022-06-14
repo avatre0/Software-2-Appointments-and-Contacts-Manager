@@ -102,8 +102,41 @@ public class AppointmentsController implements Initializable {
         }
     }
 
-    public void deleteAppointment(ActionEvent actionEvent) {
-        //Todo Setup Delete
+    /**
+     * Deletes the selected appointment
+     * @param actionEvent button delete appointment is clicked
+     * @throws SQLException
+     */
+    public void deleteAppointment(ActionEvent actionEvent) throws SQLException {
+        Appointment selectedAppointment = null;
+        //Try to pass selected appointment to the mod Appointment controller
+        if (allAppointmentTable.getSelectionModel().getSelectedItem() != null) {
+            // pass all table appointment
+            selectedAppointment = allAppointmentTable.getSelectionModel().getSelectedItem();
+        } else if (monthAppointmentTable.getSelectionModel().getSelectedItem() != null) {
+            //pass month table appointment
+            selectedAppointment = monthAppointmentTable.getSelectionModel().getSelectedItem();
+        } else if (weekAppointmentTable.getSelectionModel().getSelectedItem() != null) {
+            //pass week Appointment Table
+             selectedAppointment = monthAppointmentTable.getSelectionModel().getSelectedItem();
+        } else {
+            Utilities.errorDisplay("Error", "Please make a Appointment Selection");
+            return;
+        }
+
+        if (Utilities.confirmDisplay("Warning","Are you sure you want to delete this appointment")){
+            if(DBAppointment.deleteAppointment(selectedAppointment)){
+                Utilities.informationDisplay("Success", "Deletion of appointment was a success.");
+            } else {
+                Utilities.informationDisplay("Error", "Deletion of Appointment failed.");
+            }
+            ObservableList<Appointment> allAppointments = DBAppointment.getAllAppointments();
+            ObservableList<Appointment> monthAppointments = DBAppointment.getMonthAppointments();
+            ObservableList<Appointment> weekAppointments = DBAppointment.getWeekAppointments();
+            allAppointmentTable.setItems(allAppointments);
+            monthAppointmentTable.setItems(monthAppointments);
+            weekAppointmentTable.setItems(weekAppointments);
+        }
     }
 
     public void mainMenu(ActionEvent actionEvent) throws IOException {
@@ -115,6 +148,7 @@ public class AppointmentsController implements Initializable {
     }
 
     public void allSelectedTab(Event event) {
+        // todo something screwy here
         monthAppointmentTable.getSelectionModel().clearSelection();
         weekAppointmentTable.getSelectionModel().clearSelection();
     }

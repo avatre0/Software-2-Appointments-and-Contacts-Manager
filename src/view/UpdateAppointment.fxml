@@ -60,17 +60,12 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label text="Start Date" GridPane.columnIndex="2">
+            <Label text="Date" GridPane.columnIndex="2">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
             <Label text="Start Time" GridPane.columnIndex="2" GridPane.rowIndex="1">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label text="End Date" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <font>
                   <Font size="20.0" />
                </font>
