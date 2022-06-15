@@ -17,7 +17,7 @@
    <children>
       <TabPane prefWidth="700.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab onSelectionChanged="#typeMonthTab" text="Number of Customer Appointments by Type and Month">
+          <Tab text="Number of Customer Appointments by Type and Month">
                <content>
                   <AnchorPane prefHeight="470.0" prefWidth="700.0">
                      <children>
@@ -54,7 +54,7 @@
                   </AnchorPane>
                </content>
           </Tab>
-          <Tab onSelectionChanged="#contactScheduleTab" text="Contact Schedules by ID">
+          <Tab text="Contact Schedules by ID">
                <content>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
@@ -97,6 +97,7 @@
                   <TableView fx:id="customerTotalAptIDTable" prefHeight="200.0" prefWidth="200.0">
                     <columns>
                       <TableColumn fx:id="customerIDNumberAppointmentsCol" prefWidth="75.0" text="Customer ID" />
+                        <TableColumn fx:id="customerNameNumberAppointmentsCol" prefWidth="75.0" text="Customer Name" />
                       <TableColumn fx:id="custAppointmentsIDAmount" prefWidth="75.0" text="Amount" />
                     </columns>
                      <columnResizePolicy>

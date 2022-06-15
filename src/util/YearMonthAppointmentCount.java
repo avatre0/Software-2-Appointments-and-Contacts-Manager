@@ -1,10 +1,19 @@
 package util;
 
+/**
+ * Helper Object to store Year Month Appointments and their counts
+ */
 public class YearMonthAppointmentCount {
     private int year;
     private String month;
     private int count;
 
+    /**
+     * Constructor
+     * @param year
+     * @param month
+     * @param count
+     */
     public YearMonthAppointmentCount(int year, String month, int count) {
         this.year = year;
         this.month = month;

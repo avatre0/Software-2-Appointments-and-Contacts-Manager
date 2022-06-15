@@ -19,12 +19,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Login's FXML Controller
+ * Has a lambda expression for file name for the log
+ */
 public class LoginController implements Initializable {
 
     private ResourceBundle resourceBundle;
@@ -57,7 +61,7 @@ public class LoginController implements Initializable {
         try {
             File newFile = new File(logName.getfileName());
             newFile.createNewFile();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -79,33 +83,11 @@ public class LoginController implements Initializable {
     }
 
     /**
-     * Initializes the login view
-     * Looks for default local, if french changes login page to french
-     * @param url
-     * @param resourceBundle
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        resourceBundle = ResourceBundle.getBundle("language/language", Locale.getDefault());
-        if (Locale.getDefault().getLanguage().equals("fr") || Locale.getDefault().getLanguage().equals("en")) {
-            titleText.setText(resourceBundle.getString("title"));
-            userNameText.setText(resourceBundle.getString("username"));
-            passwordText.setText(resourceBundle.getString("password"));
-            timeZoneText.setText(resourceBundle.getString("timezone"));
-            timeZoneBox.setText(resourceBundle.getString("country"));
-            loginButton.setText(resourceBundle.getString("login"));
-            exitButton.setText(resourceBundle.getString("cancel"));
-        }
-        createFile();
-    }
-
-    /**
      * Validates Login on login button press
      * @param actionEvent
-     * @throws SQLException
      */
     @FXML
-    private void login(ActionEvent actionEvent) throws SQLException, IOException {
+    private void login(ActionEvent actionEvent) {
         String userName = userNameBox.getText();
         String password = passwordBox.getText();
         resourceBundle = ResourceBundle.getBundle("language/language", Locale.getDefault());
@@ -153,9 +135,8 @@ public class LoginController implements Initializable {
      * Writes to file login successful with the username and timestamp
      * retreives filename from lambda expression
      * @param actionEvent button press
-     * @throws IOException catches and prints stack
      */
-    private void loginSuccessful(ActionEvent actionEvent) throws IOException {
+    private void loginSuccessful(ActionEvent actionEvent) {
         try {
             FileWriter fileWriter = new FileWriter(logName.getfileName(),true);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -171,5 +152,26 @@ public class LoginController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Initializes the login view
+     * Looks for default local, if french changes login page to french
+     * @param url
+     * @param resourceBundle
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        resourceBundle = ResourceBundle.getBundle("language/language", Locale.getDefault());
+        if (Locale.getDefault().getLanguage().equals("fr") || Locale.getDefault().getLanguage().equals("en")) {
+            titleText.setText(resourceBundle.getString("title"));
+            userNameText.setText(resourceBundle.getString("username"));
+            passwordText.setText(resourceBundle.getString("password"));
+            timeZoneText.setText(resourceBundle.getString("timezone"));
+            loginButton.setText(resourceBundle.getString("login"));
+            exitButton.setText(resourceBundle.getString("cancel"));
+        }
+        timeZoneBox.setText(ZoneId.systemDefault().getId());
+        createFile();
     }
 }

@@ -4,7 +4,6 @@ import database.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -23,6 +22,9 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the reports fxml
+ */
 public class ReportsController implements Initializable {
     public TableView<TypeAppointment> typeTable;
     public TableColumn<TypeAppointment, String> typeTableTypeCol;
@@ -44,34 +46,10 @@ public class ReportsController implements Initializable {
     public TableView<CustomerAppointmentCounts> customerTotalAptIDTable;
     public TableColumn<CustomerAppointmentCounts, Integer> customerIDNumberAppointmentsCol;
     public TableColumn<CustomerAppointmentCounts, Integer> custAppointmentsIDAmount;
+    public TableColumn<CustomerAppointmentCounts, String> customerNameNumberAppointmentsCol;
 
     Stage stage;
     Parent scene;
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            ObservableList<TypeAppointment> typeAppointmentsList = DBTypeAppointment.getAppointmentTypeCountList();
-            ObservableList<YearMonthAppointmentCount> yearMonthAppointmentCountList = DBYearMonthAppointmentCount.getYearMonthCountList();
-            ObservableList<CustomerAppointmentCounts> customerAppointmentCountsList = DBCustomerAppointmentCounts.getCustomerAppointmentCounts();
-
-            typeTable.setItems(typeAppointmentsList);
-            typeTableTypeCol.setCellValueFactory(new PropertyValueFactory<>("typeName"));
-            typeTableAmountCol.setCellValueFactory(new PropertyValueFactory<>("count"));
-
-            monthTable.setItems(yearMonthAppointmentCountList);
-            monthTableYearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
-            monthTableMonthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
-            monthTableAmountCol.setCellValueFactory(new PropertyValueFactory<>("count"));
-
-            customerTotalAptIDTable.setItems(customerAppointmentCountsList);
-            customerIDNumberAppointmentsCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-            custAppointmentsIDAmount.setCellValueFactory(new PropertyValueFactory<>("count"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        setContactIDCombo();
-    }
 
     /**
      * Sets the User Id comboBox
@@ -91,13 +69,11 @@ public class ReportsController implements Initializable {
         contactIDCombo.setItems(contactList);
     }
 
-    public void typeMonthTab(Event event) {
-    }
-
-    public void contactScheduleTab(Event event) {
-    }
-
-    public void customerIDSelected(ActionEvent actionEvent) throws SQLException {
+    /**
+     * When the Customer ID is selected it sets the table to show the correct appointment information for that tab
+     * @param actionEvent Combo slection
+     */
+    public void customerIDSelected(ActionEvent actionEvent) {
         int id = contactIDCombo.getSelectionModel().getSelectedItem();
         Contact contact = DBContact.getContactByID(id);
         ObservableList<Appointment> appointmentListByContact = DBAppointment.getAppointmentsByContact(contact.getId());
@@ -115,11 +91,48 @@ public class ReportsController implements Initializable {
         }
     }
 
-    public void mainMenu(ActionEvent actionEvent) throws IOException {
-        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-        stage.setTitle("Appointments and Customer Manager");
-        stage.setScene(new Scene(scene));
-        stage.show();
+    /**
+     * Returns to the main menu
+      * @param actionEvent Main menu button
+     */
+    public void mainMenu(ActionEvent actionEvent) {
+        try {
+            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+            stage.setTitle("Appointments and Customer Manager");
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Initializes the Reports page
+     * @param url
+     * @param resourceBundle
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Observable list generation for each tab
+        ObservableList<TypeAppointment> typeAppointmentsList = DBTypeAppointment.getAppointmentTypeCountList();
+        ObservableList<YearMonthAppointmentCount> yearMonthAppointmentCountList = DBYearMonthAppointmentCount.getYearMonthCountList();
+        ObservableList<CustomerAppointmentCounts> customerAppointmentCountsList = DBCustomerAppointmentCounts.getCustomerAppointmentCounts();
+
+        // Setting the values for each table
+        typeTable.setItems(typeAppointmentsList);
+        typeTableTypeCol.setCellValueFactory(new PropertyValueFactory<>("typeName"));
+        typeTableAmountCol.setCellValueFactory(new PropertyValueFactory<>("count"));
+
+        monthTable.setItems(yearMonthAppointmentCountList);
+        monthTableYearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
+        monthTableMonthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
+        monthTableAmountCol.setCellValueFactory(new PropertyValueFactory<>("count"));
+
+        customerTotalAptIDTable.setItems(customerAppointmentCountsList);
+        customerIDNumberAppointmentsCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        custAppointmentsIDAmount.setCellValueFactory(new PropertyValueFactory<>("count"));
+        customerNameNumberAppointmentsCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        setContactIDCombo();
     }
 }

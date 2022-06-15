@@ -8,21 +8,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Helper class to handle working with Country's in the DB
+ */
 public class DBCountry {
 
     /**
      * Gets a list of Country Objects
-     * @return ObservalbeList of country's
-     * @throws SQLException Catches SQL Exceptions and prints the trace
+     * @return ObservableList of country's
      */
-    public static ObservableList<Country> getCountries() throws SQLException {
+    public static ObservableList<Country> getCountries() {
         ObservableList<Country> countries = FXCollections.observableArrayList(); // new list of countries
 
         String sql = "SELECT * FROM countries;"; //SQL Statement
-        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql); // new prepared statement from sql
+        try {
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql); // new prepared statement from sql
 
         //try to execute the query
-        try {
             ps.executeQuery();
             ResultSet rs = ps.getResultSet();
 
@@ -34,25 +36,24 @@ public class DBCountry {
             return countries;
         // catches SQL Exception
         } catch (Exception e){
-            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
 
     /**
-     * Retreives a country given its name
+     * Retrieves a country given its name
      * @param countryName String of a country value
      * @return Country object with input string value or null if no value exists
-     * @throws SQLException Catches SQL Exceptions and prints the trace
      */
-    public static Country getCountryIDByName(String countryName) throws SQLException {
+    public static Country getCountryIDByName(String countryName) {
 
         String sql = "SELECT * FROM countries WHERE Country=?;"; //SQL Statement
-        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql); // new prepared statement from sql
-        ps.setString(1,countryName);
+        try {
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql); // new prepared statement from sql
+            ps.setString(1,countryName);
 
         //try to execute the query
-        try {
             ps.executeQuery();
             ResultSet rs = ps.getResultSet();
 

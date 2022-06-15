@@ -24,12 +24,15 @@ import util.Utilities;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 
+/**
+ * The controller for create appointments fxml
+ * handles creating appointments.
+ */
 public class CreateAppointmentsController implements Initializable {
     public TextField titleBox;
     public TextField descriptionBox;
@@ -48,14 +51,13 @@ public class CreateAppointmentsController implements Initializable {
     /**
      * Saves Appointee information to the database
      * @param actionEvent Save Button Press
-     * @throws IOException  Catches and displays an error if cant save
-     * @throws SQLException Catches and displays an error if cant save
      */
-    public void saveButton(ActionEvent actionEvent) throws IOException, SQLException {
-        if (checkIfNotEmpty()) {
-            if (Utilities.confirmDisplay("Save", "Are You sure you want to save this Appointment?")) {
-                if (checkForNoOverlapAppointment()) {
-                    if (startEndCheck()) {
+    public void saveButton(ActionEvent actionEvent) {
+        if (checkIfNotEmpty()) { // check if all the attributes are filled out
+            if (Utilities.confirmDisplay("Save", "Are You sure you want to save this Appointment?")) { // confirm if you want to save the appointment
+                if (checkForNoOverlapAppointment()) { //check if the appointment over laps with an existing appointment
+                    if (startEndCheck()) { //check if the end time comes after the start time
+                        //Setting variables for the constructor
                         String title = titleBox.getText();
                         String description = descriptionBox.getText();
                         String location = locationBox.getText();
@@ -68,12 +70,13 @@ public class CreateAppointmentsController implements Initializable {
                         int userID = userIDCombo.getValue();
                         LocalDate startDate = startDatePicker.getValue();
 
-                        LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
+                        LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime); //creating a local Date time
                         LocalDateTime endDateTime = LocalDateTime.of(startDate, endTime);
 
+                        // New appointment construction
                         Appointment newAppointment = new Appointment(0, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID, contactName);
                         try {
-                            if (DBAppointment.createAppointment(newAppointment)) {
+                            if (DBAppointment.createAppointment(newAppointment)) { // if we were able to make the appointment return to the appointments FXML
                                 Utilities.informationDisplay("Successful", "Creation Successful. Returning to Appointments.");
                                 stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
                                 scene = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
@@ -83,7 +86,7 @@ public class CreateAppointmentsController implements Initializable {
                             } else {
                                 Utilities.errorDisplay("Error", "Failed to Create Appointment");
                             }
-                        } catch (Exception e) {
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
                     } else {
@@ -94,16 +97,30 @@ public class CreateAppointmentsController implements Initializable {
         }
     }
 
-    public void exitButton(ActionEvent actionEvent) throws IOException {
-        if (Utilities.confirmDisplay("Exit", "Are you sture you want to exit. Changes will not be saved")){
-            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
-            stage.setTitle("Customers");
-            stage.setScene(new Scene(scene));
-            stage.show();
+    /**
+     * Exits to the appointment list
+     * @param actionEvent exit button press
+     */
+    public void exitButton(ActionEvent actionEvent) {
+        try {
+            //asks if the user wants to exit
+            if (Utilities.confirmDisplay("Exit", "Are you sture you want to exit. Changes will not be saved")) {
+                stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
+                stage.setTitle("Customers");
+                stage.setScene(new Scene(scene));
+                stage.show();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    /**
+     * Checks if all required boxes are filled
+     * Provides error if one box isn't filled
+     * @return bool true if all boxes are filled
+     */
     private boolean checkIfNotEmpty() {
         if (titleBox.getText().isEmpty()) {
             Utilities.errorDisplay("Error", "Title is Required.");
@@ -145,75 +162,85 @@ public class CreateAppointmentsController implements Initializable {
             Utilities.errorDisplay("Error", "Title is Required.");
             return false;
         }
-
         return true;
     }
 
+    /**
+     * Sets the combo box for the contacts
+     */
     private void setContactCombo() {
+        //Observable list for the contact's
         ObservableList<String> contactList = FXCollections.observableArrayList();
-        try {
-            ObservableList<Contact> contacts = DBContact.getContactList();
-            if(contacts != null) {
-                for(Contact contact : contacts) {
-                    contactList.add(contact.getName());
-                }
+        //List of contact objects
+        ObservableList<Contact> contacts = DBContact.getContactList();
+        if(contacts != null) { // if the list is empty dont do this
+            //loops through the contact objects and gets the name for each one
+            for(Contact contact : contacts) {
+                contactList.add(contact.getName()); // adds them to the observable list
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        contactCombo.setItems(contactList);
+        contactCombo.setItems(contactList); //Sets the combo box
     }
 
     /**
      * Sets the User Id comboBox
      */
     private void setUserIDCombo() {
+        //empty List of user ids to display
         ObservableList<Integer> userList = FXCollections.observableArrayList();
-        try {
-            ObservableList<User> users = DBUser.getUserList();
-            if (users != null) {
-                for (User user : users) {
-                    userList.add(user.getId());
-                }
+        //gets a list of user objects
+        ObservableList<User> users = DBUser.getUserList();
+        if (users != null) {
+            //loops though user list and gets the ids from them
+            for (User user : users) {
+                userList.add(user.getId());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        userIDCombo.setItems(userList);
+        userIDCombo.setItems(userList); //sets the combo box
     }
 
+    /**
+     * Sets the Customer ID combo box
+     */
     private void setCustomerIDCombo() {
+        //Empty list of customer ID's to display
         ObservableList<Integer> customerList = FXCollections.observableArrayList();
         try {
+            //gets a list of customer objects
             ObservableList<Customer> customers = DBCustomer.getCustomers();
             if (customers != null) {
+                //loops through that list
                 for (Customer customer : customers) {
-                    customerList.add(customer.getId());
+                    customerList.add(customer.getId()); //adds the id to the list
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        customerIDCombo.setItems(customerList);
+        customerIDCombo.setItems(customerList); //sets the combo box
     }
 
     /**
      * Sets the time Combo boxes with local time equivalents of 8am EST to 10pm EST
      */
     private void setTimeCombos() {
+        //Sets a time of 8 and 10pm
         LocalTime openTime = LocalTime.of(8,0);
         LocalTime closeTime = LocalTime.of(22,0);
         ObservableList<LocalTime> timeList = FXCollections.observableArrayList();
 
+        //converts thoes times from EST to Local times
         LocalTime openLocalTime = Utilities.estToLocal(LocalDateTime.of(startDatePicker.getValue(),openTime)).toLocalTime();
         LocalTime closeLocalTime = Utilities.estToLocal(LocalDateTime.of(startDatePicker.getValue(),closeTime)).toLocalTime();
 
+        //builds a observable list of times in 15 minutes increments
         timeList.add(openLocalTime);
         while (openLocalTime.isBefore(closeLocalTime)) {
             openLocalTime = openLocalTime.plusMinutes(15);
             timeList.add(openLocalTime);
         }
 
+        //sets the combo boxes
         startTimeCombo.setItems(timeList);
         endTimeCombo.setItems(timeList);
         startTimeCombo.setDisable(false);
@@ -233,20 +260,19 @@ public class CreateAppointmentsController implements Initializable {
 
     /**
      * Checks if suggested appointment overlaps with another of the same customers appointments
-     * @return Bool true if customer doesnt have operlap
-     * @throws SQLException
+     * @return Bool true if customer doesn't have overlap
      */
-    private boolean checkForNoOverlapAppointment() throws SQLException {
+    private boolean checkForNoOverlapAppointment() {
         ObservableList<Appointment> custAppointments = DBAppointment.getAppointmentsByCustID(customerIDCombo.getValue());
-        LocalDateTime pickedStartDateTime = LocalDateTime.of(startDatePicker.getValue(),startTimeCombo.getValue());
-        LocalDateTime pickedEndDateTime = LocalDateTime.of(startDatePicker.getValue(),endTimeCombo.getValue());
+        LocalDateTime pickedStartDateTime = LocalDateTime.of(startDatePicker.getValue(), startTimeCombo.getValue());
+        LocalDateTime pickedEndDateTime = LocalDateTime.of(startDatePicker.getValue(), endTimeCombo.getValue());
 
         for (Appointment appointment : custAppointments) {
-            if (appointment.getStartTime().isAfter(pickedStartDateTime) && appointment.getStartTime().isBefore(pickedEndDateTime)){
+            if (appointment.getStartTime().isAfter(pickedStartDateTime) && appointment.getStartTime().isBefore(pickedEndDateTime)) {
                 Utilities.errorDisplay("Error", "Appointments cannot overlap. ");
                 return false;
             }
-            if (appointment.getEndTime().isAfter(pickedStartDateTime) && appointment.getEndTime().isBefore(pickedEndDateTime)){
+            if (appointment.getEndTime().isAfter(pickedStartDateTime) && appointment.getEndTime().isBefore(pickedEndDateTime)) {
                 Utilities.errorDisplay("Error", "Appointments cannot overlap. ");
                 return false;
             }
@@ -262,10 +288,17 @@ public class CreateAppointmentsController implements Initializable {
         setTimeCombos();
     }
 
+    /**
+     * Initializes the Create Appointment controller
+     * @param url
+     * @param resourceBundle
+     */
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) { ;
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //sets the combo boxes
         setContactCombo();
         setUserIDCombo();
         setCustomerIDCombo();
+
     }
 }

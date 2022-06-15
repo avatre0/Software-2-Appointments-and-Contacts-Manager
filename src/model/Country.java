@@ -1,7 +1,9 @@
 package model;
 
-import java.time.LocalDateTime;
 
+/**
+ * Object to hold Country info
+ */
 public class Country {
     private int id;
     private String country;

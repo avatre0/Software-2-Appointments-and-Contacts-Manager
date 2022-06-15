@@ -22,9 +22,12 @@ import util.Utilities;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/**
+ * Update Customer's controller
+ * Handles display the customer to update and changing the data for the customer you want to update
+ */
 public class UpdateCustomerController implements Initializable {
     public TextField idBox;
     public TextField nameBox;
@@ -39,7 +42,11 @@ public class UpdateCustomerController implements Initializable {
     Stage stage;
     Parent scene;
 
-    public void saveButton(ActionEvent actionEvent) throws IOException, SQLException {
+    /**
+     * Saves the info in the text box's to the selected customer
+     * @param actionEvent Save button press
+     */
+    public void saveButton(ActionEvent actionEvent) {
         if (checkIfNotEmpty()) {
             if (Utilities.confirmDisplay("Confirm", "Are You sure you want to update this Customer?")) {
 
@@ -72,13 +79,21 @@ public class UpdateCustomerController implements Initializable {
         }
     }
 
-    public void exitButton(ActionEvent actionEvent) throws IOException {
-        if (Utilities.confirmDisplay("Confirm", "Are you sture you want to exit. Changes will not be saved")) {
-            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
-            stage.setTitle("Customers");
-            stage.setScene(new Scene(scene));
-            stage.show();
+    /**
+     * Exit button, back to customers
+     * @param actionEvent Exit button action
+     */
+    public void exitButton(ActionEvent actionEvent) {
+        try {
+            if (Utilities.confirmDisplay("Confirm", "Are you sture you want to exit. Changes will not be saved")) {
+                stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
+                stage.setTitle("Customers");
+                stage.setScene(new Scene(scene));
+                stage.show();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -90,7 +105,6 @@ public class UpdateCustomerController implements Initializable {
         try {
             ObservableList<Country> countries = DBCountry.getCountries();
             if (countries != null) {
-                System.out.println("Got Here");
                 for (Country country : countries) {
                     countryList.add(country.getCountry());
                 }
@@ -103,7 +117,7 @@ public class UpdateCustomerController implements Initializable {
 
     /**
      * Receives the selected customer from the customer table.
-     * @param customer
+     * @param customer customer object
      */
     public static void incomingCustomer(Customer customer){
         selectedCustomer = customer;
@@ -118,9 +132,9 @@ public class UpdateCustomerController implements Initializable {
         ObservableList<String> divisionsList = FXCollections.observableArrayList();
 
         try {
-            ObservableList<Division>  divisions = DBDivision.getDivisionsByCountry(DBCountry.getCountryIDByName(country));
+            ObservableList<Division> divisions = DBDivision.getDivisionsByCountry(DBCountry.getCountryIDByName(country));
             if (divisions != null) {
-                for ( Division division : divisions){
+                for (Division division : divisions) {
                     divisionsList.add(division.getDivision());
                 }
             }
@@ -129,8 +143,8 @@ public class UpdateCustomerController implements Initializable {
         }
         divisionPick.setItems(divisionsList);
         divisionPick.setDisable(false);
+        setExampleText();
     }
-
     /**
      * Checks if inputs are empty
      * @return bool true if not empty and false if empty
@@ -163,6 +177,27 @@ public class UpdateCustomerController implements Initializable {
         return true;
     }
 
+    /**
+     * Sets the correct example text based on country
+     */
+    private void setExampleText() {
+        String country = countryPick.getValue();
+        if (country.equals("U.S")) {
+            addressBox.setPromptText("123 ABC Street, White Plains");
+        } else if (country.equals("UK")) {
+            addressBox.setPromptText("123 ABC Street, Greenwich, London");
+        } else if (country.equals("Canada")) {
+            addressBox.setPromptText("123 ABC Street, Newmarket");
+        }
+        addressBox.setDisable(false);
+    }
+
+    /**
+     * Initializes the Update Customer page
+     * Sets the boxes to the selected customers value
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         idBox.setText(Integer.toString(selectedCustomer.getId()));

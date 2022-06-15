@@ -1,7 +1,9 @@
 package model;
 
-import java.time.LocalDateTime;
 
+/**
+ * Object to hold division info
+ */
 public class Division {
     private int id;
     private String division;

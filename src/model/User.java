@@ -1,7 +1,9 @@
 package model;
 
-import java.time.LocalDateTime;
 
+/**
+ * Object to hold User Info
+ */
 public class User {
     private int id;
     private String userName;

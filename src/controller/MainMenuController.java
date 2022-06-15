@@ -1,7 +1,6 @@
 package controller;
 
 import database.DBAppointment;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -20,14 +19,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+/**
+ * Main menu controller handles opening up other pages
+ * Also, displaying an upcoming appointment alert
+ */
 public class MainMenuController implements Initializable {
 
     Stage stage;
@@ -75,48 +75,78 @@ public class MainMenuController implements Initializable {
         }
     }
 
-    public void customerButton(ActionEvent actionEvent) throws IOException {
-        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
-        stage.setTitle("Customers");
-        stage.setScene(new Scene(scene));
-        stage.show();
+    /**
+     * Opens the Customer page
+     * @param actionEvent Customer button
+     */
+    public void customerButton(ActionEvent actionEvent) {
+        try {
+            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
+            stage.setTitle("Customers");
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void appointmentsButton(ActionEvent actionEvent) throws IOException{
-        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
-        stage.setTitle("Appointments");
-        stage.setScene(new Scene(scene));
-        stage.show();
+    /**
+     * Opens the Appointment Page
+     * @param actionEvent appointment button
+     */
+    public void appointmentsButton(ActionEvent actionEvent) {
+        try {
+            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
+            stage.setTitle("Appointments");
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void reportsButton(ActionEvent actionEvent) throws IOException {
-        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/Reports.fxml"));
-        stage.setTitle("Reports");
-        stage.setScene(new Scene(scene));
-        stage.show();
+    /**
+     * Opens the reports page
+     * @param actionEvent report button
+     */
+    public void reportsButton(ActionEvent actionEvent) {
+        try {
+            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/Reports.fxml"));
+            stage.setTitle("Reports");
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Returns the prograrm to the login page
-     * @param actionEvent button press
-     * @throws IOException
+     * @param actionEvent logout button press
      */
-    public void logoutButton(ActionEvent actionEvent) throws IOException {
+    public void logoutButton(ActionEvent actionEvent) {
         if (Utilities.confirmDisplay("Logout", "Are you sure you want to Logout?")) {
             createFile();
             logoutSuccess();
-            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
-            stage.setTitle("Appointments and Customer Manager");
-            stage.setScene(new Scene(scene));
-            stage.show();
+            try {
+                stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
+                stage.setTitle("Appointments and Customer Manager");
+                stage.setScene(new Scene(scene));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void upcomingAppointmentAlert() throws SQLException {
+    /**
+     * Displays a message if there is a appointment within 15 minutes of opening the page
+     */
+    private void upcomingAppointmentAlert() {
         ObservableList<Appointment> appointmentsList = DBAppointment.getAllAppointments();
         LocalDateTime checkTime = LocalDateTime.now();
         int upcomingAppointmentCount = 0;
@@ -126,7 +156,7 @@ public class MainMenuController implements Initializable {
                 LocalDateTime appointmentTime = appointment.getStartTime();
                 if (appointmentTime.isBefore(checkTime.plusMinutes(15))) {
                     if (appointmentTime.isAfter(checkTime)) {
-                        String appointmentString ="Appointment ID: " + Integer.toString(appointment.getId()) + " Appointment Start Time: " + appointment.getStartTime().toString();
+                        String appointmentString ="Appointment ID: " + appointment.getId() + " Appointment Start Time: " + appointment.getStartTime().toString();
                         Utilities.informationDisplay("Upcoming Appointment", appointmentString);
                         upcomingAppointmentCount++;
                     }
@@ -138,12 +168,13 @@ public class MainMenuController implements Initializable {
         }
     }
 
+    /**
+     * Initializes the Main mneu page
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            upcomingAppointmentAlert();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        upcomingAppointmentAlert();
     }
 }

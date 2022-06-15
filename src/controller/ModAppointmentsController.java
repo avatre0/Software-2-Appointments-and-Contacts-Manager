@@ -99,16 +99,28 @@ public class ModAppointmentsController implements Initializable {
         }
     }
 
-    public void exitButton(ActionEvent actionEvent) throws IOException {
-        if (Utilities.confirmDisplay("Exit", "Are you sture you want to exit. Changes will not be saved")){
-            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
-            stage.setTitle("Appointments");
-            stage.setScene(new Scene(scene));
-            stage.show();
+    /**
+     * Exits back to Appointments window
+     * @param actionEvent exit button press
+     */
+    public void exitButton(ActionEvent actionEvent) {
+        try {
+            if (Utilities.confirmDisplay("Exit", "Are you sture you want to exit. Changes will not be saved")) {
+                stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("/view/Appointments.fxml"));
+                stage.setTitle("Appointments");
+                stage.setScene(new Scene(scene));
+                stage.show();
+            }
+        } catch (IOException e)  {
+            e.printStackTrace();
         }
     }
 
+    /**
+     * Check to make sure all required boxes are filled
+     * @return bool true if all boxes are filled
+     */
     private boolean checkIfNotEmpty() {
         if (titleBox.getText().isEmpty()) {
             Utilities.errorDisplay("Error", "Title is Required.");
@@ -154,6 +166,9 @@ public class ModAppointmentsController implements Initializable {
         return true;
     }
 
+    /**
+     * Sets the Contact Name Combo Box
+     */
     private void setContactCombo() {
         ObservableList<String> contactList = FXCollections.observableArrayList();
         try {
@@ -187,6 +202,9 @@ public class ModAppointmentsController implements Initializable {
         userIDCombo.setItems(userList);
     }
 
+    /**
+     * Sets the Customer ID Combo Box
+     */
     private void setCustomerIDCombo() {
         ObservableList<Integer> customerList = FXCollections.observableArrayList();
         try {
@@ -241,7 +259,7 @@ public class ModAppointmentsController implements Initializable {
      * @return Bool true if customer doesnt have operlap
      * @throws SQLException
      */
-    private boolean checkForNoOverlapAppointment() throws SQLException {
+    private boolean checkForNoOverlapAppointment() {
         ObservableList<Appointment> custAppointments = DBAppointment.getAppointmentsByCustID(customerIDCombo.getValue());
         LocalDateTime pickedStartDateTime = LocalDateTime.of(startDatePicker.getValue(),startTimeCombo.getValue());
         LocalDateTime pickedEndDateTime = LocalDateTime.of(startDatePicker.getValue(),endTimeCombo.getValue());
@@ -277,6 +295,11 @@ public class ModAppointmentsController implements Initializable {
         selectedAppointment = appointment;
     }
 
+    /**
+     * Initializes the Update Appointment FXML page
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Sets the combo boxes

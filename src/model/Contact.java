@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * Object to hold Contacts
+ */
 public class Contact {
     private int id;
     private String name;

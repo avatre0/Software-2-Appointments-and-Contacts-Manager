@@ -37,7 +37,7 @@
             <Label text="PHONE" GridPane.rowIndex="4" />
             <TextField fx:id="idBox" disable="true" promptText="Auto Generated" GridPane.columnIndex="1" />
             <TextField fx:id="nameBox" promptText="Enter Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="addressBox" promptText="Enter Address" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="addressBox" disable="true" promptText="Please Select a Country" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="postalCodeBox" promptText="Enter Postal Code" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="phoneBox" promptText="Enter Phone Number" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>

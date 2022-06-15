@@ -9,6 +9,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
+/**
+ * Helper class to handle Alert Generation and time conversion
+ */
 public class Utilities {
 
     /**
@@ -52,12 +55,12 @@ public class Utilities {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
+/*
     /**
      * Converts UTC to local time
      * @param localDateTime UTC time
      * @return Local Time
-     */
+     *
     public static LocalDateTime utcToLocal(LocalDateTime localDateTime) {
         ZonedDateTime zdt = localDateTime.atZone(ZoneId.of("UTC"));
         ZonedDateTime localzdt = zdt.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
@@ -68,7 +71,7 @@ public class Utilities {
      * Converts Local time to UTC
      * @param localDateTime Local Time
      * @return UTC Time
-     */
+     *
     public static LocalDateTime localToUTC(LocalDateTime localDateTime) {
         ZonedDateTime zdt = localDateTime.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
         ZonedDateTime utczdt = zdt.withZoneSameInstant(ZoneId.of("UTC"));
@@ -79,12 +82,13 @@ public class Utilities {
      * Converts Local to EST
      * @param localDateTime Local Time
      * @return EST Time
-     */
+     *
     public static LocalDateTime localToEST(LocalDateTime localDateTime) {
         ZonedDateTime zdt = localDateTime.atZone(ZoneId.of(ZoneId.systemDefault().toString()));
         ZonedDateTime estzdt = zdt.withZoneSameInstant(ZoneId.of("America/New_York"));
         return estzdt.toLocalDateTime();
     }
+*/
 
     /**
      * Converts EST to Local

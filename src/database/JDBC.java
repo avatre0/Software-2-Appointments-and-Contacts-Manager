@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Helper class to manage connection to the db
+ */
 public abstract class JDBC {
     private static final String protocol = "jdbc";
     private static final String vendor = ":mysql:";
@@ -12,9 +15,13 @@ public abstract class JDBC {
     private static final String jdbcUrl = protocol + vendor + location +databaseName + "?connectionTimeZone = SERVER"; //LOCAL
     private static final String driver = "com.mysql.cj.jdbc.Driver"; // Driver Reference
     private static final String userName = "sqlUser"; // Username
-    private static String password = "Passw0rd!"; //Password
+    private static final String password = "Passw0rd!"; //Password
     private static Connection connection = null;
 
+    /**
+     * Opens a connection to the DB
+     * @return a connection object
+     */
     public static Connection openConnection()
     {
         try
@@ -30,6 +37,9 @@ public abstract class JDBC {
         return connection;
     }
 
+    /**
+     * Closes the connection to the DB
+     */
     public static void closeConnection()
     {
         try
@@ -43,6 +53,10 @@ public abstract class JDBC {
         }
     }
 
+    /**
+     * Holds the connection to the DB
+     * @return Connection to the DB
+     */
     public  static Connection getConnection()
     {
         return connection;

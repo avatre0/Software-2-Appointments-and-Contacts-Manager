@@ -25,6 +25,10 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the Create Customer FXML
+ * Handles the creation of customers
+ */
 public class CreateCustomerController implements Initializable {
     @FXML
     public TextField idBox;
@@ -64,10 +68,10 @@ public class CreateCustomerController implements Initializable {
     /**
      * Saves customer to database
      * @param actionEvent button press that saves customer
-     * @throws IOException
+     * @throws SQLException handled in the DBCustomer.java
      */
     @FXML
-    private void saveButton(ActionEvent actionEvent) throws IOException, SQLException {
+    private void saveButton(ActionEvent actionEvent) throws SQLException {
        if (checkIfNotEmpty()) {
            if (Utilities.confirmDisplay("Confirm", "Are You sure you want to save this Customer?")) {
                String name = nameBox.getText();
@@ -97,14 +101,22 @@ public class CreateCustomerController implements Initializable {
        }
     }
 
+    /**
+     * returns to the customer list page
+     * @param actionEvent button press exit
+     */
     @FXML
-    private void exitButton(ActionEvent actionEvent) throws IOException {
+    private void exitButton(ActionEvent actionEvent) {
         if (Utilities.confirmDisplay("Confirm", "Are you sture you want to exit. Changes will not be saved")) {
-            stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
-            stage.setTitle("Customers");
-            stage.setScene(new Scene(scene));
-            stage.show();
+            try {
+                stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("/view/Customer.fxml"));
+                stage.setTitle("Customers");
+                stage.setScene(new Scene(scene));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -140,24 +152,17 @@ public class CreateCustomerController implements Initializable {
         return true;
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setCountryPick();
-    }
-
     /**
      * When a country is selected this builds a list to enable the divsion combobox
-     * @param actionEvent
      */
     @FXML
-    private void countrySelected(ActionEvent actionEvent) {
+    private void countrySelected() {
         String country = countryPick.getValue();
         ObservableList<String> divisionsList = FXCollections.observableArrayList();
 
         try {
             ObservableList<Division>  divisions = DBDivision.getDivisionsByCountry(DBCountry.getCountryIDByName(country));
             if (divisions != null) {
-                System.out.println("Got Here");
                 for ( Division division : divisions){
                     divisionsList.add(division.getDivision());
                 }
@@ -167,5 +172,32 @@ public class CreateCustomerController implements Initializable {
         }
         divisionPick.setItems(divisionsList);
         divisionPick.setDisable(false);
+        setExampleText();
+    }
+
+    /**
+     * Sets the correct example text based on country
+     */
+    private void setExampleText() {
+        String country = countryPick.getValue();
+        if (country.equals("U.S")) {
+            addressBox.setPromptText("123 ABC Street, White Plains");
+        } else if (country.equals("UK")) {
+            addressBox.setPromptText("123 ABC Street, Greenwich, London");
+        } else if (country.equals("Canada")) {
+            addressBox.setPromptText("123 ABC Street, Newmarket");
+        }
+        addressBox.setDisable(false);
+    }
+
+    /**
+     * Initializes the Create Customer fxml
+     * Sets the country combo box
+     * @param url
+     * @param resourceBundle
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setCountryPick();
     }
 }
