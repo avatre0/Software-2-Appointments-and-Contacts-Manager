@@ -72,7 +72,7 @@
                               <Label text="Contact ID" />
                               <ComboBox fx:id="contactIDCombo" onAction="#customerIDSelected" prefWidth="150.0" GridPane.columnIndex="1" />
                               <Label text="Name:" GridPane.columnIndex="2" />
-                              <Label fx:id="contactName" GridPane.columnIndex="3" />
+                              <Label fx:id="contactNameLabel" GridPane.columnIndex="3" />
                            </children>
                         </GridPane>
                         <TableView fx:id="contactScheduleTable" layoutX="12.0" layoutY="30.0" prefHeight="432.0" prefWidth="678.0">

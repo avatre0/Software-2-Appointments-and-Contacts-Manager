@@ -12,13 +12,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.*;
+import util.ContactName;
 import util.CustomerAppointmentCounts;
 import util.TypeAppointment;
 import util.YearMonthAppointmentCount;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
@@ -35,7 +35,7 @@ public class ReportsController implements Initializable {
     public TableColumn<YearMonthAppointmentCount,Integer> monthTableAmountCol;
     public ComboBox<Integer> contactIDCombo;
     public TableView<Appointment> contactScheduleTable;
-    public Label contactName;
+    public Label contactNameLabel;
     public TableColumn<Appointment, Integer> contactScheduleApptIDCol;
     public TableColumn<Appointment, String> contactScheduleTitleCol;
     public TableColumn<Appointment, String> contactScheduleTypeCol;
@@ -50,6 +50,13 @@ public class ReportsController implements Initializable {
 
     Stage stage;
     Parent scene;
+
+    /**
+     * Lambda Expression #3
+     * This lambda gets and adds a space to the front of a contact name
+     * This efficiently retrieve and movies the contact name, for better code reuse.
+     */
+    ContactName contactName = (Contact contact) -> " " + contact.getName();
 
     /**
      * Sets the User Id comboBox
@@ -71,7 +78,8 @@ public class ReportsController implements Initializable {
 
     /**
      * When the Customer ID is selected it sets the table to show the correct appointment information for that tab
-     * @param actionEvent Combo slection
+     * Calls a lambda expression to set the contact name when the combo box is set
+     * @param actionEvent Combo selection
      */
     public void customerIDSelected(ActionEvent actionEvent) {
         int id = contactIDCombo.getSelectionModel().getSelectedItem();
@@ -79,7 +87,7 @@ public class ReportsController implements Initializable {
         ObservableList<Appointment> appointmentListByContact = DBAppointment.getAppointmentsByContact(contact.getId());
 
         if (contact.getId() != 0) {
-            contactName.setText(contact.getName());
+            contactNameLabel.setText(contactName.getContactName(contact));
             contactScheduleTable.setItems(appointmentListByContact);
             contactScheduleApptIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
             contactScheduleTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));

@@ -40,11 +40,10 @@ public class MainMenuController implements Initializable {
     public Button logoutButton;
 
     /**
-     * Lambda Expression
+     * Lambda Expression #2
+     * This efficiently and with minimal code sets the string for what the log will be called
      */
-    LogName logName = () -> {
-        return "login_activity.txt";
-    };
+    LogName logName = () -> "login_activity.txt";
 
     /**
      * Creates a new File from a lambda expression value

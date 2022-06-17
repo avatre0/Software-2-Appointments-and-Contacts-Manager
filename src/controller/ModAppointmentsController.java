@@ -266,12 +266,23 @@ public class ModAppointmentsController implements Initializable {
 
         for (Appointment appointment : custAppointments) {
             if (appointment.getId() != Integer.parseInt(idBox.getText())) {
-                if (appointment.getStartTime().isAfter(pickedStartDateTime) && appointment.getStartTime().isBefore(pickedEndDateTime)) {
-                    Utilities.errorDisplay("Error", "Appointments cannot overlap. ");
+
+                LocalDateTime appointmentStartTime = appointment.getStartTime();
+                LocalDateTime appointmentEndTime = appointment.getEndTime();
+
+                if (pickedStartDateTime.isEqual(appointmentStartTime)) {
+                    //Appointment Starts during or at the start of a meeting
+                    Utilities.errorDisplay("Error","Appointments can't overlap");
                     return false;
                 }
-                if (appointment.getEndTime().isAfter(pickedStartDateTime) && appointment.getEndTime().isBefore(pickedEndDateTime)) {
-                    Utilities.errorDisplay("Error", "Appointments cannot overlap. ");
+                if (pickedStartDateTime.isAfter(appointmentStartTime) && pickedStartDateTime.isBefore(appointmentEndTime)) {
+                    //Appointment Starts during a meeting
+                    Utilities.errorDisplay("Error","Appointments can't overlap");
+                    return false;
+                }
+                if (pickedEndDateTime.isAfter(appointmentStartTime) && pickedEndDateTime.isBefore(appointmentEndTime)) {
+                    //Appointment ends during a meeting
+                    Utilities.errorDisplay("Error","Appointments can't overlap");
                     return false;
                 }
             }
@@ -321,8 +332,8 @@ public class ModAppointmentsController implements Initializable {
         contactCombo.getSelectionModel().select(selectedAppointment.getContactName());
         startTimeCombo.getSelectionModel().select(startTime);
         endTimeCombo.getSelectionModel().select(endTime);
-        customerIDCombo.getSelectionModel().select(selectedAppointment.getCustomerID());
-        userIDCombo.getSelectionModel().select(selectedAppointment.getUserID());
+        customerIDCombo.getSelectionModel().select(Integer.valueOf(selectedAppointment.getCustomerID()));
+        userIDCombo.getSelectionModel().select(Integer.valueOf(selectedAppointment.getUserID()));
         startDatePicker.setValue(startDate);
 
         setTimeCombos();

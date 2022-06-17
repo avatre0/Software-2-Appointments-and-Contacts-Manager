@@ -19,7 +19,7 @@ public class DBYearMonthAppointmentCount {
      */
     public static ObservableList<YearMonthAppointmentCount> getYearMonthCountList() {
         ObservableList<YearMonthAppointmentCount> yearMonthAppointmentCountList = FXCollections.observableArrayList();
-       String sql =  "SELECT EXTRACT(Year from start) AS Year, MONTHNAME(start) AS Month, COUNT(start) FROM appointments GROUP BY Year;";
+       String sql =  "SELECT EXTRACT(Year from start) AS Year, MONTHNAME(start) AS Month, COUNT(start) FROM appointments GROUP BY Month;";
        try {
            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
